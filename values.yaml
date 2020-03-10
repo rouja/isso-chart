@@ -1,0 +1,84 @@
+# Default values for isso.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+hostnames: 
+  - isso.example.com
+certmanager:
+  issuerType: ClusterIssuer
+  issuerName: letsencrypt-stage
+storage:
+  storageClassName: hostpath
+  size: 2Gi
+replicaCount: 1
+image:
+  repository: jarou/isso
+  pullPolicy: Always
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+config: |-
+  [general]
+  dbpath = /var/lib/isso/comments.db
+  host =
+    http://127.0.0.1:8080/
+  [server]
+  listen = http://0.0.0.0:8080/
+  [guard]
+  enabled = true
+  ratelimit = 2
+  direct-reply = 3
+  reply-to-self = false
+  require-author = false
+  require-email = false
+  [hash]
+  salt = longpassphrasethatneedtobechanged
+  algorithm = pbkdf2
+  [admin]
+  enabled = true
+  password = NeedToBeChanged

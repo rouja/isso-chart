@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "isso.fullname" . }}
+  labels:
+    {{- include "isso.labels" . | nindent 4 }}
+data:
+  isso.conf:
+    {{- toYaml .Values.config | nindent 4 }}

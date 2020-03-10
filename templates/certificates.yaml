@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: {{ include "isso.fullname" . }}-certificates
+spec:
+  secretName: {{ include "isso.fullname" . }}-certificates
+  renewBefore: 1440h # 60d
+  commonName: "{{ first (required "hostname" .Values.hostnames) }}"
+  dnsNames:
+{{- range .Values.hostnames }}
+  - "{{ . }}"
+{{- end }}
+  issuerRef:
+    kind: {{ .Values.certmanager.issuerType }}
+    name: {{ .Values.certmanager.issuerName }}
